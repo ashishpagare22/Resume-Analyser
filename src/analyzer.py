@@ -2,6 +2,42 @@ import re
 from collections import Counter
 
 
+<<<<<<< HEAD
+ANALYSIS_MODES = {
+    "balanced": {
+        "label": "Balanced",
+        "description": "Blend ATS keyword matching with practical recruiter readability.",
+        "weights": {
+            "keyword": 0.45,
+            "section": 0.2,
+            "action": 0.15,
+            "impact": 0.2,
+        },
+    },
+    "ats": {
+        "label": "ATS-first",
+        "description": "Give extra weight to keyword coverage and clean section structure.",
+        "weights": {
+            "keyword": 0.55,
+            "section": 0.25,
+            "action": 0.08,
+            "impact": 0.12,
+        },
+    },
+    "recruiter": {
+        "label": "Recruiter-first",
+        "description": "Prioritize impact, clarity, and bullet quality over strict ATS weighting.",
+        "weights": {
+            "keyword": 0.34,
+            "section": 0.16,
+            "action": 0.15,
+            "impact": 0.35,
+        },
+    },
+}
+
+=======
+>>>>>>> 7afe968348a35cbe12aa447825c489f3fb695fd5
 COMMON_STOPWORDS = {
     "a",
     "about",
@@ -88,6 +124,17 @@ ROLE_HINTS = {
     "product": ["roadmap", "stakeholder", "kpi", "experimentation", "research"],
 }
 
+<<<<<<< HEAD
+ROLE_LABELS = {
+    "data": "Data and analytics",
+    "software": "Software engineering",
+    "marketing": "Marketing and growth",
+    "product": "Product management",
+    "general": "General professional fit",
+}
+
+=======
+>>>>>>> 7afe968348a35cbe12aa447825c489f3fb695fd5
 
 def normalize_text(text: str) -> str:
     return re.sub(r"\s+", " ", text.strip().lower())
@@ -298,6 +345,16 @@ def build_bullet_improvements(
                 "example": "Mention stack, scale, and impact, such as 'Built REST APIs in Python and reduced average response time by 28% across 3 customer workflows.'",
             }
         )
+<<<<<<< HEAD
+    elif role_focus == "product":
+        examples.append(
+            {
+                "issue": "Product ownership is undersold",
+                "example": "Show decisions and results, such as 'Led roadmap prioritization that improved feature adoption by 18% across 2 release cycles.'",
+            }
+        )
+=======
+>>>>>>> 7afe968348a35cbe12aa447825c489f3fb695fd5
 
     if not examples:
         examples.append(
@@ -310,6 +367,105 @@ def build_bullet_improvements(
     return examples[:4]
 
 
+<<<<<<< HEAD
+def build_strength_signals(
+    keyword_score: int,
+    detected_sections: list[str],
+    impact_score: int,
+    matched_keywords: list[str],
+    action_score: int,
+) -> list[str]:
+    signals = []
+
+    if keyword_score >= 65:
+        signals.append(
+            f"Role language is reasonably aligned already, with {len(matched_keywords)} priority terms appearing in the resume."
+        )
+
+    if "Experience" in detected_sections:
+        signals.append("The experience section is clearly labeled, which helps both ATS parsing and recruiter scanning.")
+
+    if impact_score >= 55:
+        signals.append("The resume already includes measurable outcomes in enough places to create credibility.")
+
+    if action_score >= 50:
+        signals.append("Action verbs are active enough to make the writing sound more achievement-driven than passive.")
+
+    if not signals:
+        signals.append("There is useful raw material here, and the biggest lift now comes from sharper targeting rather than a total rewrite.")
+
+    return signals[:4]
+
+
+def build_ats_risks(
+    missing_keywords: list[str],
+    detected_sections: list[str],
+    impact_score: int,
+    keyword_score: int,
+    action_score: int,
+) -> list[str]:
+    risks = []
+
+    if keyword_score < 60 and missing_keywords:
+        risks.append(
+            f"Keyword coverage is thin. Missing terms like {', '.join(missing_keywords[:4])} may reduce ATS ranking."
+        )
+
+    if "Skills" not in detected_sections:
+        risks.append("A missing or unclear skills section makes exact tool matching harder for automated screening.")
+
+    if impact_score < 50:
+        risks.append("Several bullets read like responsibilities rather than results, which weakens recruiter confidence.")
+
+    if action_score < 45:
+        risks.append("Passive phrasing may make the resume feel flatter than the actual work delivered.")
+
+    if "Summary" not in detected_sections:
+        risks.append("Without a tailored summary, the most relevant fit can be easy to miss in the first scan.")
+
+    if not risks:
+        risks.append("No major ATS or recruiter red flags were detected in this pass.")
+
+    return risks[:4]
+
+
+def build_checklist(
+    keyword_score: int,
+    impact_score: int,
+    action_score: int,
+    detected_sections: list[str],
+) -> list[dict]:
+    return [
+        {
+            "label": "Keyword coverage above 60%",
+            "status": keyword_score >= 60,
+            "detail": "A healthier overlap with the job description improves ATS confidence.",
+        },
+        {
+            "label": "Dedicated skills section",
+            "status": "Skills" in detected_sections,
+            "detail": "Explicit tools and platforms should be easy to scan in one place.",
+        },
+        {
+            "label": "Quantified achievements present",
+            "status": impact_score >= 50,
+            "detail": "Recruiters respond better when the resume proves scale, results, or efficiency gains.",
+        },
+        {
+            "label": "Action-oriented writing",
+            "status": action_score >= 45,
+            "detail": "Bullet points should sound active and owned, not passive or generic.",
+        },
+        {
+            "label": "Clear summary or projects support",
+            "status": "Summary" in detected_sections or "Projects" in detected_sections,
+            "detail": "Strong framing near the top or project proof deeper down both help the story land faster.",
+        },
+    ]
+
+
+=======
+>>>>>>> 7afe968348a35cbe12aa447825c489f3fb695fd5
 def build_summary(score: int, keyword_score: int, impact_score: int, missing_keywords: list[str]) -> str:
     if score >= 75:
         return "This resume already shows meaningful alignment with the target role and mainly needs sharper tailoring, not a rewrite."
@@ -330,8 +486,40 @@ def build_next_step(missing_keywords: list[str], impact_score: int, detected_sec
     return "Do one final tailoring pass by matching the exact wording of the posting in your most relevant experience bullets."
 
 
+<<<<<<< HEAD
+def build_summary_template(role_focus: str, matched_keywords: list[str], missing_keywords: list[str]) -> str:
+    strengths = matched_keywords[:3]
+    while len(strengths) < 3:
+        strengths.append(["relevant tools", "cross-functional delivery", "measurable outcomes"][len(strengths)])
+
+    bridge_term = missing_keywords[0] if missing_keywords else "the role's top priorities"
+    return (
+        "Try a top-summary line like: "
+        f"'Professional with hands-on experience in {strengths[0]}, {strengths[1]}, and {strengths[2]}. "
+        f"Known for delivering measurable results and now targeting {ROLE_LABELS.get(role_focus, ROLE_LABELS['general']).lower()} work involving {bridge_term}.'"
+    )
+
+
+def build_keyword_bridge(matched_keywords: list[str], missing_keywords: list[str]) -> str:
+    if matched_keywords and missing_keywords:
+        return f"Connect proven work in {matched_keywords[0]} to the missing target term {missing_keywords[0]} inside a top experience bullet."
+    if missing_keywords:
+        return f"Use {missing_keywords[0]} in a bullet only if you can back it with a real example, tool, or project."
+    return "The keyword coverage is already solid, so focus more on impact and ordering than on adding terms."
+
+
+def analyze_resume(
+    resume_text: str,
+    job_description: str,
+    analysis_mode: str = "balanced",
+    keyword_limit: int = 24,
+) -> dict:
+    mode = ANALYSIS_MODES.get(analysis_mode, ANALYSIS_MODES["balanced"])
+    keywords = extract_keywords(job_description, limit=keyword_limit)
+=======
 def analyze_resume(resume_text: str, job_description: str) -> dict:
     keywords = extract_keywords(job_description)
+>>>>>>> 7afe968348a35cbe12aa447825c489f3fb695fd5
     normalized_resume = normalize_text(resume_text)
 
     matched_keywords = [keyword for keyword in keywords if keyword in normalized_resume]
@@ -342,8 +530,18 @@ def analyze_resume(resume_text: str, job_description: str) -> dict:
     section_score = round((len(detected_sections) / len(SECTION_PATTERNS)) * 100)
     verb_score = action_verb_score(resume_text)
     impact_score, impact_summary = quantify_impact(resume_text)
+<<<<<<< HEAD
+
+    weights = mode["weights"]
+    overall_score = round(
+        (keyword_score * weights["keyword"])
+        + (section_score * weights["section"])
+        + (verb_score * weights["action"])
+        + (impact_score * weights["impact"])
+=======
     overall_score = round(
         (keyword_score * 0.45) + (section_score * 0.2) + (verb_score * 0.15) + (impact_score * 0.2)
+>>>>>>> 7afe968348a35cbe12aa447825c489f3fb695fd5
     )
 
     role_focus = infer_role_focus(job_description)
@@ -351,7 +549,14 @@ def analyze_resume(resume_text: str, job_description: str) -> dict:
 
     return {
         "score": overall_score,
+<<<<<<< HEAD
+        "analysis_mode_label": mode["label"],
+        "analysis_mode_description": mode["description"],
         "readiness_label": readiness_label,
+        "focus_label": ROLE_LABELS.get(role_focus, ROLE_LABELS["general"]),
+=======
+        "readiness_label": readiness_label,
+>>>>>>> 7afe968348a35cbe12aa447825c489f3fb695fd5
         "keywords": keywords,
         "matched_keywords": matched_keywords,
         "missing_keywords": missing_keywords,
@@ -374,6 +579,29 @@ def analyze_resume(resume_text: str, job_description: str) -> dict:
             verb_score,
             role_focus,
         ),
+<<<<<<< HEAD
+        "strength_signals": build_strength_signals(
+            keyword_score,
+            detected_sections,
+            impact_score,
+            matched_keywords,
+            verb_score,
+        ),
+        "ats_risks": build_ats_risks(
+            missing_keywords,
+            detected_sections,
+            impact_score,
+            keyword_score,
+            verb_score,
+        ),
+        "ats_checklist": build_checklist(
+            keyword_score,
+            impact_score,
+            verb_score,
+            detected_sections,
+        ),
+=======
+>>>>>>> 7afe968348a35cbe12aa447825c489f3fb695fd5
         "summary": build_summary(
             overall_score,
             keyword_score,
@@ -385,4 +613,16 @@ def analyze_resume(resume_text: str, job_description: str) -> dict:
             impact_score,
             detected_sections,
         ),
+<<<<<<< HEAD
+        "summary_template": build_summary_template(
+            role_focus,
+            matched_keywords,
+            missing_keywords,
+        ),
+        "keyword_bridge": build_keyword_bridge(
+            matched_keywords,
+            missing_keywords,
+        ),
+=======
+>>>>>>> 7afe968348a35cbe12aa447825c489f3fb695fd5
     }

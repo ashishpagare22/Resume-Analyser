@@ -11,10 +11,17 @@ A lightweight Streamlit app that compares a resume against a job description and
 ## Features
 
 - Upload a resume PDF or paste resume text
+<<<<<<< HEAD
+- Paste the full job description as text
+- Get an ATS-style score based on keyword, section, impact, and writing quality coverage
+- Surface missing skills, weak sections, and low-impact bullet patterns
+- Show practical recommendations, rewrite examples, and a more polished dashboard UI
+=======
 - Upload a job description PDF or paste job description text
 - Get an ATS-style score based on keyword, section, and impact coverage
 - Surface missing skills, weak sections, and low-impact bullet patterns
 - Show practical recommendations and rewrite examples
+>>>>>>> 7afe968348a35cbe12aa447825c489f3fb695fd5
 
 ## Quick start
 
